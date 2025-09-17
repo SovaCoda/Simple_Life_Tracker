@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTG Commander Life Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="players-grid">
+            <div class="player-panel" id="player1">
+                <div class="player-label">Player 1</div>
+                <div class="life-display" id="life1">40</div>
+                <div class="controls">
+                    <button class="life-btn minus" data-player="1" data-action="minus">-1</button>
+                    <button class="life-btn plus" data-player="1" data-action="plus">+1</button>
+                </div>
+            </div>
+            <div class="player-panel" id="player2">
+                <div class="player-label">Player 2</div>
+                <div class="life-display" id="life2">40</div>
+                <div class="controls">
+                    <button class="life-btn minus" data-player="2" data-action="minus">-1</button>
+                    <button class="life-btn plus" data-player="2" data-action="plus">+1</button>
+                </div>
+            </div>
+            <div class="player-panel" id="player3">
+                <div class="player-label">Player 3</div>
+                <div class="life-display" id="life3">40</div>
+                <div class="controls">
+                    <button class="life-btn minus" data-player="3" data-action="minus">-1</button>
+                    <button class="life-btn plus" data-player="3" data-action="plus">+1</button>
+                </div>
+            </div>
+            <div class="player-panel" id="player4">
+                <div class="player-label">Player 4</div>
+                <div class="life-display" id="life4">40</div>
+                <div class="controls">
+                    <button class="life-btn minus" data-player="4" data-action="minus">-1</button>
+                    <button class="life-btn plus" data-player="4" data-action="plus">+1</button>
+                </div>
+            </div>
+            <div class="center-buttons">
+                <button class="dino-btn" id="dinoBtn">🦕</button>
+                <button class="reset-btn" id="resetBtn">Reset All</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

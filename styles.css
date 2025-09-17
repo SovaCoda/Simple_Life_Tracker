@@ -1,0 +1,297 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    color: #fbbf24;
+    background-color: #2d2d2d;
+    border-bottom: 2px solid #4b5563;
+    flex-shrink: 0;
+}
+
+.players-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: calc(100vh - 0px);
+    gap: 0;
+    position: relative;
+}
+
+.player-panel {
+    background-color: #2d2d2d;
+    border: 2px solid #4b5563;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.player-panel#player1,
+.player-panel#player2 {
+    transform: rotate(180deg);
+}
+
+.player-panel#player3,
+.player-panel#player4 {
+    flex-direction: column;
+}
+
+.player-label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #d1d5db;
+    margin: 0.5rem 0;
+}
+
+.life-display {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #10b981;
+    margin: 1rem 0;
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    line-height: 1;
+}
+
+.controls {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 0.5rem 0;
+}
+
+.life-btn {
+    width: 80px;
+    height: 80px;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.life-btn:active {
+    transform: scale(0.95);
+}
+
+.life-btn.minus {
+    background-color: #ef4444;
+    color: white;
+}
+
+.life-btn.minus:hover {
+    background-color: #dc2626;
+}
+
+.life-btn.plus {
+    background-color: #10b981;
+    color: white;
+}
+
+.life-btn.plus:hover {
+    background-color: #059669;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.25rem;
+        padding: 0.25rem;
+    }
+    
+    .players-grid {
+        height: calc(100vh - 50px);
+    }
+    
+    .player-label {
+        font-size: 1.25rem;
+    }
+    
+    .life-display {
+        font-size: 4rem;
+    }
+    
+    .life-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .controls {
+        gap: 1rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+    .title {
+        font-size: 1rem;
+        padding: 0.25rem;
+    }
+    
+    .players-grid {
+        height: calc(100vh - 40px);
+    }
+    
+    .player-label {
+        font-size: 1rem;
+        margin: 0.25rem 0;
+    }
+    
+    .life-display {
+        font-size: 3rem;
+        margin: 0.5rem 0;
+    }
+    
+    .life-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+    
+    .controls {
+        gap: 0.75rem;
+        margin: 0.25rem 0;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .player-panel {
+        border-color: #ffffff;
+    }
+    
+    .life-display {
+        color: #00ff00;
+    }
+}
+
+.center-buttons {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.dino-btn {
+    background-color: #059669;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dino-btn:hover {
+    background-color: #047857;
+    transform: scale(1.05);
+}
+
+.dino-btn:active {
+    transform: scale(0.95);
+}
+
+.reset-btn {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.reset-btn:hover {
+    background-color: #b91c1c;
+    transform: scale(1.05);
+}
+
+.reset-btn:active {
+    transform: scale(0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .life-btn {
+        transition: none;
+    }
+    
+    .life-btn:active {
+        transform: none;
+    }
+    
+    .dino-btn {
+        transition: none;
+    }
+    
+    .dino-btn:hover {
+        transform: none;
+    }
+    
+    .dino-btn:active {
+        transform: none;
+    }
+    
+    .reset-btn {
+        transition: none;
+    }
+    
+    .reset-btn:hover {
+        transform: none;
+    }
+    
+    .reset-btn:active {
+        transform: none;
+    }
+}
