@@ -63,34 +63,34 @@ body {
 }
 
 .player-label {
-    font-size: 1.5rem;
+    font-size: 2.5vw;
     font-weight: 600;
     color: #d1d5db;
-    margin: 0.5rem 0;
+    margin: 1vh 0;
 }
 
 .life-display {
-    font-size: 6rem;
+    font-size: 12vw;
     font-weight: bold;
     color: #10b981;
-    margin: 1rem 0;
+    margin: 2vh 0;
     text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
     line-height: 1;
 }
 
 .controls {
     display: flex;
-    gap: 1.5rem;
+    gap: 3vw;
     justify-content: center;
-    margin: 0.5rem 0;
+    margin: 1vh 0;
 }
 
 .life-btn {
-    width: 80px;
-    height: 80px;
+    width: 12vw;
+    height: 12vw;
     border: none;
     border-radius: 0.75rem;
-    font-size: 2rem;
+    font-size: 3vw;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -132,21 +132,37 @@ body {
     }
     
     .player-label {
-        font-size: 2.25rem;
+        font-size: 3vw;
     }
     
     .life-display {
-        font-size: 8rem;
+        font-size: 15vw;
     }
     
     .life-btn {
-        width: 120px;
-        height: 120px;
-        font-size: 2.5rem;
+        width: 15vw;
+        height: 15vw;
+        font-size: 4vw;
     }
     
     .controls {
-        gap: 1rem;
+        gap: 4vw;
+    }
+    
+    .dino-btn {
+        width: 15vw;
+        height: 15vw;
+        font-size: 4vw;
+    }
+    
+    .reset-btn {
+        width: 15vw;
+        height: 15vw;
+        font-size: 1.5vw;
+    }
+    
+    .center-buttons {
+        gap: 3vw;
     }
 }
 
@@ -199,7 +215,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 10;
     display: flex;
-    gap: 1rem;
+    gap: 2vw;
     align-items: center;
 }
 
@@ -208,9 +224,9 @@ body {
     color: white;
     border: none;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    font-size: 2rem;
+    width: 12vw;
+    height: 12vw;
+    font-size: 3vw;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -239,9 +255,9 @@ body {
     color: white;
     border: none;
     border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    font-size: 0.9rem;
+    width: 12vw;
+    height: 12vw;
+    font-size: 1.2vw;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
