@@ -111,13 +111,15 @@
     }
     
     function resetAllCounters() {
-        lifeTotals.player1 = 40;
-        lifeTotals.player2 = 40;
-        lifeTotals.player3 = 40;
-        lifeTotals.player4 = 40;
-        
-        updateDisplay();
-        saveLifeTotals();
+        if (confirm('Are you sure you want to reset all life totals to 40?')) {
+            lifeTotals.player1 = 40;
+            lifeTotals.player2 = 40;
+            lifeTotals.player3 = 40;
+            lifeTotals.player4 = 40;
+            
+            updateDisplay();
+            saveLifeTotals();
+        }
     }
     
     function setupEventListeners() {

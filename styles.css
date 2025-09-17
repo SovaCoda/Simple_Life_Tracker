@@ -132,17 +132,17 @@ body {
     }
     
     .player-label {
-        font-size: 1.25rem;
+        font-size: 2.25rem;
     }
     
     .life-display {
-        font-size: 4rem;
+        font-size: 8rem;
     }
     
     .life-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
     }
     
     .controls {
