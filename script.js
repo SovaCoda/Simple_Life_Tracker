@@ -21,26 +21,10 @@
             'roar.mp3', 'growl.mp3', 'dinosaur.mp3'
         ];
         
-        for (var i = 0; i < possibleFiles.length; i++) {
-            var audio = new Audio('audio/' + possibleFiles[i]);
-            audio.addEventListener('canplaythrough', function() {
-                var fileName = this.src.split('/').pop();
-                if (dinoSoundFiles.indexOf(fileName) === -1) {
-                    dinoSoundFiles.push(fileName);
-                }
-            });
-            audio.addEventListener('error', function() {
-            });
-        }
+        dinoSoundFiles = possibleFiles.slice();
     }
     
     function playDinoSound() {
-        if (dinoSoundFiles.length === 0) {
-            console.log('ROAR! (No audio files found in audio/ folder)');
-            alert('No dinosaur sound files found!\n\nPlease add audio files to the audio/ folder.\nSupported formats: .mp3, .wav, .ogg');
-            return;
-        }
-        
         try {
             var randomIndex = Math.floor(Math.random() * dinoSoundFiles.length);
             var selectedFile = dinoSoundFiles[randomIndex];
@@ -49,13 +33,18 @@
             audio.volume = 0.7;
             
             audio.play().catch(function(error) {
-                console.log('Audio play failed:', error);
-                console.log('ROAR! (Audio playback failed)');
+                console.log('Audio play failed for', selectedFile, ':', error);
+                var nextIndex = (randomIndex + 1) % dinoSoundFiles.length;
+                var nextFile = dinoSoundFiles[nextIndex];
+                var fallbackAudio = new Audio('audio/' + nextFile);
+                fallbackAudio.volume = 0.7;
+                fallbackAudio.play().catch(function(fallbackError) {
+                    console.log('Fallback audio also failed:', fallbackError);
+                });
             });
             
         } catch (e) {
             console.log('Error playing dinosaur sound:', e);
-            console.log('ROAR! (Audio error)');
         }
     }
     
