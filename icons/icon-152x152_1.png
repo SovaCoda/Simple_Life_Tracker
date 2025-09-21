@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#1a1a1a" rx="64"/>
+  
+  <!-- MTG-style border -->
+  <rect x="32" y="32" width="448" height="448" fill="none" stroke="#4b5563" stroke-width="8" rx="32"/>
+  
+  <!-- Life counter representation -->
+  <circle cx="256" cy="200" r="60" fill="#10b981" stroke="#ffffff" stroke-width="4"/>
+  <text x="256" y="210" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="48" font-weight="bold">40</text>
+  
+  <!-- Plus and minus buttons -->
+  <circle cx="180" cy="320" r="30" fill="#ef4444" stroke="#ffffff" stroke-width="3"/>
+  <text x="180" y="330" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="bold">-</text>
+  
+  <circle cx="332" cy="320" r="30" fill="#10b981" stroke="#ffffff" stroke-width="3"/>
+  <text x="332" y="330" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="bold">+</text>
+  
+  <!-- Commander damage indicator -->
+  <rect x="220" y="380" width="72" height="20" fill="#fbbf24" rx="10"/>
+  <text x="256" y="395" text-anchor="middle" fill="#1a1a1a" font-family="Arial, sans-serif" font-size="14" font-weight="bold">CMD</text>
+</svg>
