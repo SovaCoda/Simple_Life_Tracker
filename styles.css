@@ -41,6 +41,7 @@ body {
 /* Layout Classes */
 .h-screen {
     height: 100vh;
+    touch-action: manipulation;
 }
 
 .flex {
@@ -246,6 +247,7 @@ body {
 
 .h-screen {
     height: 100vh;
+    touch-action: manipulation;
 }
 
 .min-w-12 {
@@ -572,6 +574,10 @@ button {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.edit-name-btn, .dino-btn, #hamburgerBtn, #resetAllBtn, #fullscreenBtn, #backgroundsBtn, [id*="MenuBtn"] {
+    touch-action: manipulation;
 }
 
 /* iPad Mini 2 specific optimizations */
