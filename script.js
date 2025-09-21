@@ -853,11 +853,12 @@
             }
         }
         
-        // Close menus when clicking outside
-        document.addEventListener('click', function(e) {
+        // Close menus when clicking/tapping outside
+        function handleOutsideClick(e) {
             var hamburgerMenu = document.getElementById('hamburgerBtn');
             var menuOptions = document.getElementById('menuOptions');
             
+            // Close main hamburger menu
             if (hamburgerMenu && menuOptions && 
                 !hamburgerMenu.contains(e.target) && 
                 !menuOptions.contains(e.target)) {
@@ -880,7 +881,11 @@
             if (!clickedInsidePlayerMenu) {
                 closeAllPlayerMenus();
             }
-        });
+        }
+        
+        // Add both click and touchstart event listeners
+        document.addEventListener('click', handleOutsideClick);
+        document.addEventListener('touchstart', handleOutsideClick, { passive: true });
     }
     
     if (document.readyState === 'loading') {
