@@ -170,66 +170,17 @@
         }
     }
     
-    function playDinoSound() {
-        // Enable audio on first user interaction
-        enableAudioOnInteraction();
-        
-        // If not initialized, try to initialize and use fallback
-        if (!audioInitialized && !audioInitializing) {
-            initDinoAudio();
-            playDinoSoundFallback();
-            return;
-        }
-        
-        // If still initializing, use fallback
-        if (audioInitializing) {
-            playDinoSoundFallback();
-            return;
-        }
-        
-        try {
-            // Use fallback if Web Audio API failed or no buffers
-            if (audioInitialized === 'fallback' || dinoAudioBuffers.length === 0) {
-                playDinoSoundFallback();
-                return;
-            }
-            
-            // Ensure audio context is ready
-            if (!dinoAudioContext) {
-                playDinoSoundFallback();
-                return;
-            }
-            
-            // Resume audio context if suspended
-            if (dinoAudioContext.state === 'suspended') {
-                dinoAudioContext.resume().then(function() {
-                    // Try again after resuming
-                    setTimeout(playDinoSound, 50);
-                }).catch(function(error) {
-                    console.log('Error resuming audio context:', error);
-                    playDinoSoundFallback();
-                });
-                return;
-            }
-            
-            // Create and play sound using Web Audio API
-            var randomBuffer = dinoAudioBuffers[Math.floor(Math.random() * dinoAudioBuffers.length)];
-            var source = dinoAudioContext.createBufferSource();
-            var gainNode = dinoAudioContext.createGain();
-            
-            source.buffer = randomBuffer;
-            gainNode.gain.value = 0.7;
-            
-            source.connect(gainNode);
-            gainNode.connect(dinoAudioContext.destination);
-            
-            source.start(0);
-            
-        } catch (error) {
-            console.log('Error playing dino sound with Web Audio API:', error);
-            playDinoSoundFallback();
-        }
+function playDinoSound() {
+    try {
+        var audio = new Audio();
+        var randomFile = dinoSoundFiles[Math.floor(Math.random() * dinoSoundFiles.length)];
+        audio.src = 'audio/' + randomFile;
+        audio.volume = 0.7;
+        audio.play().catch(function(error) {
+        });
+    } catch (error) {
     }
+}
     
     function playDinoSoundFallback() {
         try {
@@ -873,139 +824,77 @@
             }
         }
         
-        // Handle individual dino buttons for each player
         var dinoButtons = document.querySelectorAll('.dino-btn');
         for (var i = 0; i < dinoButtons.length; i++) {
             var dinoBtn = dinoButtons[i];
-            
-            // Optimized for iPad Mini 2 - use both touchstart and click for reliability
-            dinoBtn.addEventListener('touchstart', function(e) {
+            dinoBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 playDinoSound();
-            }, { passive: false });
-            
-            dinoBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                playDinoSound();
-            });
+                return false;
+            };
         }
         
-        // Handle edit name buttons
         var editButtons = document.querySelectorAll('.edit-name-btn');
         for (var i = 0; i < editButtons.length; i++) {
             var editBtn = editButtons[i];
             var player = editBtn.getAttribute('data-player');
-            
-            
-            editBtn.addEventListener('touchstart', function(e) {
+            editBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 var targetPlayer = this.getAttribute('data-player');
                 editPlayerName(targetPlayer);
-            }, { passive: false });
-            
-            editBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var targetPlayer = this.getAttribute('data-player');
-                editPlayerName(targetPlayer);
-            });
+                return false;
+            };
         }
         
-        // Handle hamburger menu button
         var hamburgerBtn = document.getElementById('hamburgerBtn');
         if (hamburgerBtn) {
-            
-            hamburgerBtn.addEventListener('touchstart', function(e) {
+            hamburgerBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 toggleMenu();
-            }, { passive: false });
-            
-            hamburgerBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleMenu();
-            });
+                return false;
+            };
         }
         
-        // Handle reset all button in menu
         var resetAllBtn = document.getElementById('resetAllBtn');
         if (resetAllBtn) {
-           
-            resetAllBtn.addEventListener('touchstart', function(e) {
+            resetAllBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 resetAllCounters();
                 resetPlayerNames();
                 resetPlayerColors();
                 resetPlayerCounters();
                 closeMenu();
-            }, { passive: false });
-            
-            resetAllBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                resetAllCounters();
-                resetPlayerNames();
-                resetPlayerColors();
-                resetPlayerCounters();
-                closeMenu();
-            });
+                return false;
+            };
         }
         
-        // Handle fullscreen button in menu
         var fullscreenBtn = document.getElementById('fullscreenBtn');
         if (fullscreenBtn) {
-            
-            fullscreenBtn.addEventListener('touchstart', function(e) {
+            fullscreenBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 toggleFullscreen();
-            }, { passive: false });
-            
-            fullscreenBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleFullscreen();
-            });
+                return false;
+            };
         }
         
-        // Handle backgrounds button in menu
         var backgroundsBtn = document.getElementById('backgroundsBtn');
         if (backgroundsBtn) {
-            
-            backgroundsBtn.addEventListener('touchstart', function(e) {
+            backgroundsBtn.ontouchstart = function(e) {
                 e.preventDefault();
-                e.stopPropagation();
                 showBackgrounds();
-            }, { passive: false });
-            
-            backgroundsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                showBackgrounds();
-            });
+                return false;
+            };
         }
         
-        // Handle player menu buttons
         for (var i = 1; i <= 4; i++) {
             var playerMenuBtn = document.getElementById('player' + i + 'MenuBtn');
             if (playerMenuBtn) {
-                if ('ontouchstart' in window) {
-                    playerMenuBtn.addEventListener('touchstart', function(e) {
-                        e.preventDefault();
-                        var playerNum = parseInt(this.id.replace('player', '').replace('MenuBtn', ''));
-                        togglePlayerMenu(playerNum);
-                    }, { passive: false });
-                } else {
-                    playerMenuBtn.addEventListener('click', function() {
-                        var playerNum = parseInt(this.id.replace('player', '').replace('MenuBtn', ''));
-                        togglePlayerMenu(playerNum);
-                    });
-                }
+                playerMenuBtn.ontouchstart = function(e) {
+                    e.preventDefault();
+                    var playerNum = parseInt(this.id.replace('player', '').replace('MenuBtn', ''));
+                    togglePlayerMenu(playerNum);
+                    return false;
+                };
             }
         }
         
