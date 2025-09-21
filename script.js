@@ -93,36 +93,195 @@
     function loadDinoSounds() {
         var possibleFiles = [
             'roar1.mp3', 'roar2.mp3', 'roar3.mp3',
-            'growl1.wav', 'growl2.wav', 'growl3.wav',
-            't_rex.mp3', 'raptor_call.ogg', 'triceratops.wav',
-            'dino_roar_1.mp3', 'dino_roar_2.mp3', 'dino_growl.mp3',
-            'roar.mp3', 'growl.mp3', 'dinosaur.mp3'
         ];
         
         dinoSoundFiles = possibleFiles.slice();
     }
     
+    // Enhanced audio system for dino sounds
+    var dinoAudioContext = null;
+    var dinoAudioBuffers = [];
+    var audioInitialized = false;
+    var audioEnabled = false;
+    var audioInitializing = false;
+    
+    function initDinoAudio() {
+        if (audioInitializing || audioInitialized) {
+            return;
+        }
+        
+        audioInitializing = true;
+        
+        try {
+            // Create audio context only once
+            if (!dinoAudioContext) {
+                var AudioContext = window.AudioContext || window.webkitAudioContext;
+                dinoAudioContext = new AudioContext();
+            }
+            
+            // Load audio files
+            var audioFiles = dinoSoundFiles.map(function(file) {
+                return 'audio/' + file;
+            });
+            
+            var loadPromises = audioFiles.map(function(url) {
+                return fetch(url)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw new Error('Failed to load audio: ' + url);
+                        }
+                        return response.arrayBuffer();
+                    })
+                    .then(function(arrayBuffer) {
+                        return dinoAudioContext.decodeAudioData(arrayBuffer);
+                    })
+                    .catch(function(error) {
+                        console.log('Error loading audio file:', url, error);
+                        return null;
+                    });
+            });
+            
+            Promise.all(loadPromises).then(function(buffers) {
+                dinoAudioBuffers = buffers.filter(function(buffer) {
+                    return buffer !== null;
+                });
+                audioInitialized = true;
+                audioInitializing = false;
+                console.log('Dino audio initialized with', dinoAudioBuffers.length, 'sounds');
+            }).catch(function(error) {
+                console.log('Error in audio initialization:', error);
+                audioInitialized = 'fallback';
+                audioInitializing = false;
+            });
+            
+        } catch (error) {
+            console.log('Error initializing dino audio:', error);
+            audioInitialized = 'fallback';
+            audioInitializing = false;
+        }
+    }
+    
+    function enableAudioOnInteraction() {
+        if (!audioEnabled) {
+            audioEnabled = true;
+            if (dinoAudioContext && dinoAudioContext.state === 'suspended') {
+                dinoAudioContext.resume();
+            }
+        }
+    }
+    
     function playDinoSound() {
+        // Enable audio on first user interaction
+        enableAudioOnInteraction();
+        
+        // If not initialized, try to initialize and use fallback
+        if (!audioInitialized && !audioInitializing) {
+            initDinoAudio();
+            playDinoSoundFallback();
+            return;
+        }
+        
+        // If still initializing, use fallback
+        if (audioInitializing) {
+            playDinoSoundFallback();
+            return;
+        }
+        
+        try {
+            // Use fallback if Web Audio API failed or no buffers
+            if (audioInitialized === 'fallback' || dinoAudioBuffers.length === 0) {
+                playDinoSoundFallback();
+                return;
+            }
+            
+            // Ensure audio context is ready
+            if (!dinoAudioContext) {
+                playDinoSoundFallback();
+                return;
+            }
+            
+            // Resume audio context if suspended
+            if (dinoAudioContext.state === 'suspended') {
+                dinoAudioContext.resume().then(function() {
+                    // Try again after resuming
+                    setTimeout(playDinoSound, 50);
+                }).catch(function(error) {
+                    console.log('Error resuming audio context:', error);
+                    playDinoSoundFallback();
+                });
+                return;
+            }
+            
+            // Create and play sound using Web Audio API
+            var randomBuffer = dinoAudioBuffers[Math.floor(Math.random() * dinoAudioBuffers.length)];
+            var source = dinoAudioContext.createBufferSource();
+            var gainNode = dinoAudioContext.createGain();
+            
+            source.buffer = randomBuffer;
+            gainNode.gain.value = 0.7;
+            
+            source.connect(gainNode);
+            gainNode.connect(dinoAudioContext.destination);
+            
+            source.start(0);
+            
+        } catch (error) {
+            console.log('Error playing dino sound with Web Audio API:', error);
+            playDinoSoundFallback();
+        }
+    }
+    
+    function playDinoSoundFallback() {
         try {
             var randomIndex = Math.floor(Math.random() * dinoSoundFiles.length);
             var selectedFile = dinoSoundFiles[randomIndex];
             
             var audio = new Audio('audio/' + selectedFile);
             audio.volume = 0.7;
+            audio.preload = 'auto';
             
-            audio.play().catch(function(error) {
-                console.log('Audio play failed for', selectedFile, ':', error);
-                var nextIndex = (randomIndex + 1) % dinoSoundFiles.length;
-                var nextFile = dinoSoundFiles[nextIndex];
-                var fallbackAudio = new Audio('audio/' + nextFile);
-                fallbackAudio.volume = 0.7;
-                fallbackAudio.play().catch(function(fallbackError) {
-                    console.log('Fallback audio also failed:', fallbackError);
+            // Add event listeners for better error handling
+            audio.addEventListener('error', function(e) {
+                console.log('Audio error for', selectedFile, ':', e);
+                tryAlternativeAudio(randomIndex);
+            });
+            
+            audio.addEventListener('loadstart', function() {
+                console.log('Loading audio:', selectedFile);
+            });
+            
+            // Handle autoplay restrictions
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(function(error) {
+                    console.log('Audio play failed for', selectedFile, ':', error);
+                    tryAlternativeAudio(randomIndex);
                 });
+            }
+            
+        } catch (e) {
+            console.log('Error in fallback audio:', e);
+        }
+    }
+    
+    function tryAlternativeAudio(originalIndex) {
+        try {
+            var nextIndex = (originalIndex + 1) % dinoSoundFiles.length;
+            var nextFile = dinoSoundFiles[nextIndex];
+            var fallbackAudio = new Audio('audio/' + nextFile);
+            fallbackAudio.volume = 0.7;
+            fallbackAudio.preload = 'auto';
+            
+            fallbackAudio.addEventListener('error', function(e) {
+                console.log('Alternative audio also failed:', e);
+            });
+            
+            fallbackAudio.play().catch(function(fallbackError) {
+                console.log('Fallback audio play failed:', fallbackError);
             });
             
         } catch (e) {
-            console.log('Error playing dinosaur sound:', e);
+            console.log('Error trying alternative audio:', e);
         }
     }
     
