@@ -4,46 +4,344 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MTG Commander Life Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mtg-green': '#10b981',
+                        'mtg-red': '#ef4444',
+                        'mtg-dark': '#1a1a1a',
+                        'mtg-panel': '#2d2d2d',
+                        'mtg-border': '#4b5563',
+                        'mtg-text': '#d1d5db',
+                        'mtg-yellow': '#fbbf24'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        @media (prefers-contrast: high) {
+            .border-mtg-border {
+                border-color: #ffffff !important;
+            }
+            .text-mtg-green {
+                color: #00ff00 !important;
+            }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            .transition-all {
+                transition: none !important;
+            }
+            .hover\:scale-105:hover {
+                transform: none !important;
+            }
+            .active\:scale-95:active {
+                transform: none !important;
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="players-grid">
-            <div class="player-panel" id="player1">
-                <div class="player-label">Player 1</div>
-                <div class="life-display" id="life1">40</div>
-                <div class="controls">
-                    <button class="life-btn minus" data-player="1" data-action="minus">-1</button>
-                    <button class="life-btn plus" data-player="1" data-action="plus">+1</button>
+<body class="bg-mtg-dark text-white font-sans m-0 p-0 h-screen overflow-hidden">
+    <div class="h-screen flex flex-col">
+        <div class="grid grid-cols-2 grid-rows-2 h-screen gap-0 relative">
+            <div class="bg-mtg-panel border-2 border-mtg-border p-4 text-center flex flex-col justify-center items-center transform rotate-180" id="player1">
+                <div class="flex items-center gap-2 my-3">
+                    <span class="text-4xl font-semibold text-mtg-text" id="name1">Player 1</span>
+                    <button class="edit-name-btn text-mtg-text hover:text-white transition-colors" data-player="1" title="Edit name">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </button>
+                    <button class="dino-btn hidden bg-mtg-green text-white border-none rounded-full w-8 h-8 text-lg font-bold cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-green-700 hover:scale-105 active:scale-95 flex items-center justify-center" data-player="1" title="Dino Roar!">🦕</button>
+                </div>
+                <div class="text-8xl font-bold text-mtg-green my-6 drop-shadow-lg" id="life1">40</div>
+                
+                <div class="flex gap-6 justify-center items-center my-3">
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="1" data-action="minus">-1</button>
+                    
+                    <div class="relative">
+                        <button class="bg-mtg-panel text-white border-2 border-mtg-border rounded-full w-16 h-16 cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-mtg-border hover:scale-105 active:scale-95 flex items-center justify-center" id="player1MenuBtn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-[90%] mt-3 bg-mtg-panel border-2 border-mtg-border rounded-xl shadow-2xl hidden z-30" id="player1MenuOptions" style="font-size: 1.5em;">
+                            <div class="p-3 space-y-2 min-w-[7.5rem]">
+                                <div class="text-center text-white text-base font-semibold mb-3">Commander Damage</div>
+                                
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="1" data-counter="commander" data-from="2" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander1from2">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="1" data-counter="commander" data-from="2" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="1" data-counter="commander" data-from="3" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander1from3">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="1" data-counter="commander" data-from="3" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-4">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="1" data-counter="commander" data-from="4" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander1from4">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="1" data-counter="commander" data-from="4" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-green-400 text-base font-semibold mb-3">☠️ Poison</div>
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="1" data-counter="poison" data-action="minus">-</button>
+                                <span class="text-green-400 text-lg font-bold min-w-12 text-center" id="poison1">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-green-400 text-white hover:bg-green-500 active:scale-95" data-player="1" data-counter="poison" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-yellow-400 text-base font-semibold mb-3">⚡ Energy</div>
+                            <div class="flex gap-3 justify-center items-center">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="1" data-counter="energy" data-action="minus">-</button>
+                                <span class="text-yellow-400 text-lg font-bold min-w-12 text-center" id="energy1">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-yellow-400 text-white hover:bg-yellow-500 active:scale-95" data-player="1" data-counter="energy" data-action="plus">+</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="1" data-action="plus">+1</button>
                 </div>
             </div>
-            <div class="player-panel" id="player2">
-                <div class="player-label">Player 2</div>
-                <div class="life-display" id="life2">40</div>
-                <div class="controls">
-                    <button class="life-btn minus" data-player="2" data-action="minus">-1</button>
-                    <button class="life-btn plus" data-player="2" data-action="plus">+1</button>
+            
+            <div class="bg-mtg-panel border-2 border-mtg-border p-4 text-center flex flex-col justify-center items-center transform rotate-180" id="player2">
+                <div class="flex items-center gap-2 my-3">
+                    <span class="text-4xl font-semibold text-mtg-text" id="name2">Player 2</span>
+                    <button class="edit-name-btn text-mtg-text hover:text-white transition-colors" data-player="2" title="Edit name">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </button>
+                    <button class="dino-btn hidden bg-mtg-green text-white border-none rounded-full w-8 h-8 text-lg font-bold cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-green-700 hover:scale-105 active:scale-95 flex items-center justify-center" data-player="2" title="Dino Roar!">🦕</button>
+                </div>
+                <div class="text-8xl font-bold text-mtg-green my-6 drop-shadow-lg" id="life2">40</div>
+                
+                <div class="flex gap-6 justify-center items-center my-3">
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="2" data-action="minus">-1</button>
+                    
+                    <div class="relative">
+                        <button class="bg-mtg-panel text-white border-2 border-mtg-border rounded-full w-16 h-16 cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-mtg-border hover:scale-105 active:scale-95 flex items-center justify-center" id="player2MenuBtn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-[90%] mt-3 bg-mtg-panel border-2 border-mtg-border rounded-xl shadow-2xl hidden z-30" id="player2MenuOptions" style="font-size: 1.5em;">
+                            <div class="p-3 space-y-2 min-w-[7.5rem]">
+                                <div class="text-center text-white text-base font-semibold mb-3">Commander Damage</div>
+                                
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="2" data-counter="commander" data-from="1" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander2from1">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="2" data-counter="commander" data-from="1" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="2" data-counter="commander" data-from="3" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander2from3">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="2" data-counter="commander" data-from="3" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-4">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="2" data-counter="commander" data-from="4" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander2from4">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="2" data-counter="commander" data-from="4" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-green-400 text-base font-semibold mb-3">☠️ Poison</div>
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="2" data-counter="poison" data-action="minus">-</button>
+                                <span class="text-green-400 text-lg font-bold min-w-12 text-center" id="poison2">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-green-400 text-white hover:bg-green-500 active:scale-95" data-player="2" data-counter="poison" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-yellow-400 text-base font-semibold mb-3">⚡ Energy</div>
+                            <div class="flex gap-3 justify-center items-center">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="2" data-counter="energy" data-action="minus">-</button>
+                                <span class="text-yellow-400 text-lg font-bold min-w-12 text-center" id="energy2">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-yellow-400 text-white hover:bg-yellow-500 active:scale-95" data-player="2" data-counter="energy" data-action="plus">+</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="2" data-action="plus">+1</button>
                 </div>
             </div>
-            <div class="player-panel" id="player3">
-                <div class="player-label">Player 3</div>
-                <div class="life-display" id="life3">40</div>
-                <div class="controls">
-                    <button class="life-btn minus" data-player="3" data-action="minus">-1</button>
-                    <button class="life-btn plus" data-player="3" data-action="plus">+1</button>
+            
+            <div class="bg-mtg-panel border-2 border-mtg-border p-4 text-center flex flex-col justify-center items-center" id="player3">
+                <div class="flex items-center gap-2 my-3">
+                    <span class="text-4xl font-semibold text-mtg-text" id="name3">Player 3</span>
+                    <button class="edit-name-btn text-mtg-text hover:text-white transition-colors" data-player="3" title="Edit name">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </button>
+                    <button class="dino-btn hidden bg-mtg-green text-white border-none rounded-full w-8 h-8 text-lg font-bold cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-green-700 hover:scale-105 active:scale-95 flex items-center justify-center" data-player="3" title="Dino Roar!">🦕</button>
+                </div>
+                <div class="text-8xl font-bold text-mtg-green my-6 drop-shadow-lg" id="life3">40</div>
+                
+                <div class="flex gap-6 justify-center items-center my-3">
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="3" data-action="minus">-1</button>
+                    
+                    <div class="relative">
+                        <button class="bg-mtg-panel text-white border-2 border-mtg-border rounded-full w-16 h-16 cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-mtg-border hover:scale-105 active:scale-95 flex items-center justify-center" id="player3MenuBtn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-[90%] mt-3 bg-mtg-panel border-2 border-mtg-border rounded-xl shadow-2xl hidden z-30" id="player3MenuOptions" style="font-size: 1.5em;">
+                            <div class="p-3 space-y-2 min-w-[7.5rem]">
+                                <div class="text-center text-white text-base font-semibold mb-3">Commander Damage</div>
+                                
+                                <div class="flex gap-3 justify-center items-center mb-3">
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="3" data-counter="commander" data-from="1" data-action="minus">-</button>
+                                    <span class="text-white text-lg font-bold min-w-12 text-center" id="commander3from1">0</span>
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="3" data-counter="commander" data-from="1" data-action="plus">+</button>
+                                </div>
+                                
+                                <div class="flex gap-3 justify-center items-center mb-3">
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="3" data-counter="commander" data-from="2" data-action="minus">-</button>
+                                    <span class="text-white text-lg font-bold min-w-12 text-center" id="commander3from2">0</span>
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="3" data-counter="commander" data-from="2" data-action="plus">+</button>
+                                </div>
+                                
+                                <div class="flex gap-3 justify-center items-center mb-4">
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="3" data-counter="commander" data-from="4" data-action="minus">-</button>
+                                    <span class="text-white text-lg font-bold min-w-12 text-center" id="commander3from4">0</span>
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="3" data-counter="commander" data-from="4" data-action="plus">+</button>
+                                </div>
+                                
+                                <div class="text-center text-green-400 text-base font-semibold mb-3">☠️ Poison</div>
+                                <div class="flex gap-3 justify-center items-center mb-3">
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="3" data-counter="poison" data-action="minus">-</button>
+                                    <span class="text-green-400 text-lg font-bold min-w-12 text-center" id="poison3">0</span>
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-green-400 text-white hover:bg-green-500 active:scale-95" data-player="3" data-counter="poison" data-action="plus">+</button>
+                                </div>
+                                
+                                <div class="text-center text-yellow-400 text-base font-semibold mb-3">⚡ Energy</div>
+                                <div class="flex gap-3 justify-center items-center">
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="3" data-counter="energy" data-action="minus">-</button>
+                                    <span class="text-yellow-400 text-lg font-bold min-w-12 text-center" id="energy3">0</span>
+                                    <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-yellow-400 text-white hover:bg-yellow-500 active:scale-95" data-player="3" data-counter="energy" data-action="plus">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="3" data-action="plus">+1</button>
                 </div>
             </div>
-            <div class="player-panel" id="player4">
-                <div class="player-label">Player 4</div>
-                <div class="life-display" id="life4">40</div>
-                <div class="controls">
-                    <button class="life-btn minus" data-player="4" data-action="minus">-1</button>
-                    <button class="life-btn plus" data-player="4" data-action="plus">+1</button>
+            
+            <div class="bg-mtg-panel border-2 border-mtg-border p-4 text-center flex flex-col justify-center items-center" id="player4">
+                <div class="flex items-center gap-2 my-3">
+                    <span class="text-4xl font-semibold text-mtg-text" id="name4">Player 4</span>
+                    <button class="edit-name-btn text-mtg-text hover:text-white transition-colors" data-player="4" title="Edit name">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </button>
+                    <button class="dino-btn hidden bg-mtg-green text-white border-none rounded-full w-8 h-8 text-lg font-bold cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-green-700 hover:scale-105 active:scale-95 flex items-center justify-center" data-player="4" title="Dino Roar!">🦕</button>
+                </div>
+                <div class="text-8xl font-bold text-mtg-green my-6 drop-shadow-lg" id="life4">40</div>
+                
+                <div class="flex gap-6 justify-center items-center my-3">
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="4" data-action="minus">-1</button>
+                    
+                    <div class="relative">
+                        <button class="bg-mtg-panel text-white border-2 border-mtg-border rounded-full w-16 h-16 cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-mtg-border hover:scale-105 active:scale-95 flex items-center justify-center" id="player4MenuBtn">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-[90%] mt-3 bg-mtg-panel border-2 border-mtg-border rounded-xl shadow-2xl hidden z-30" id="player4MenuOptions" style="font-size: 1.5em;">
+                            <div class="p-3 space-y-2 min-w-[7.5rem]">
+                                <div class="text-center text-white text-base font-semibold mb-3">Commander Damage</div>
+                                
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="4" data-counter="commander" data-from="1" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander4from1">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="4" data-counter="commander" data-from="1" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="4" data-counter="commander" data-from="2" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander4from2">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="4" data-counter="commander" data-from="2" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="flex gap-3 justify-center items-center mb-4">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-red text-white hover:bg-red-600 active:scale-95" data-player="4" data-counter="commander" data-from="3" data-action="minus">-</button>
+                                <span class="text-white text-lg font-bold min-w-12 text-center" id="commander4from3">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="4" data-counter="commander" data-from="3" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-green-400 text-base font-semibold mb-3">☠️ Poison</div>
+                            <div class="flex gap-3 justify-center items-center mb-3">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="4" data-counter="poison" data-action="minus">-</button>
+                                <span class="text-green-400 text-lg font-bold min-w-12 text-center" id="poison4">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-green-400 text-white hover:bg-green-500 active:scale-95" data-player="4" data-counter="poison" data-action="plus">+</button>
+                            </div>
+                            
+                            <div class="text-center text-yellow-400 text-base font-semibold mb-3">⚡ Energy</div>
+                            <div class="flex gap-3 justify-center items-center">
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-red-500 text-white hover:bg-red-600 active:scale-95" data-player="4" data-counter="energy" data-action="minus">-</button>
+                                <span class="text-yellow-400 text-lg font-bold min-w-12 text-center" id="energy4">0</span>
+                                <button class="w-10 h-10 border-none rounded text-lg font-bold cursor-pointer transition-all duration-200 select-none bg-yellow-400 text-white hover:bg-yellow-500 active:scale-95" data-player="4" data-counter="energy" data-action="plus">+</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="w-32 h-32 border-none rounded-xl text-4xl font-bold cursor-pointer transition-all duration-200 select-none bg-mtg-green text-white hover:bg-green-600 active:scale-95" data-player="4" data-action="plus">+1</button>
                 </div>
             </div>
-            <div class="center-buttons">
-                <button class="dino-btn" id="dinoBtn">🦕</button>
-                <button class="reset-btn" id="resetBtn">Reset All</button>
+            
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
+                <button class="bg-mtg-panel text-white border-2 border-mtg-border rounded-full w-16 h-16 cursor-pointer transition-all duration-200 select-none shadow-lg hover:bg-mtg-border hover:scale-105 active:scale-95 flex items-center justify-center" id="hamburgerBtn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                
+            </div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt bg-mtg-panel border-2 border-mtg-border rounded-lg shadow-lg hidden z-30" id="menuOptions">
+                <div class="p-2 space-y-1">
+                    <button class="w-full px-4 py-2 text-left text-white hover:bg-mtg-border rounded transition-colors flex items-center gap-2" id="resetAllBtn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Reset All
+                    </button>
+                    <button class="w-full px-4 py-2 text-left text-white hover:bg-mtg-border rounded transition-colors flex items-center gap-2" id="fullscreenBtn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                        </svg>
+                        Fullscreen
+                    </button>
+                    <button class="w-full px-4 py-2 text-left text-white hover:bg-mtg-border rounded transition-colors flex items-center gap-2" id="backgroundsBtn">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        Colors
+                    </button>
+                </div>
             </div>
         </div>
     </div>
