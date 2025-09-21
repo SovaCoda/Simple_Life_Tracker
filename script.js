@@ -877,16 +877,19 @@
         var dinoButtons = document.querySelectorAll('.dino-btn');
         for (var i = 0; i < dinoButtons.length; i++) {
             var dinoBtn = dinoButtons[i];
-            if ('ontouchstart' in window) {
-                dinoBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    playDinoSound();
-                }, { passive: false });
-            } else {
-                dinoBtn.addEventListener('click', function() {
-                    playDinoSound();
-                });
-            }
+            
+            // Optimized for iPad Mini 2 - use both touchstart and click for reliability
+            dinoBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                playDinoSound();
+            }, { passive: false });
+            
+            dinoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                playDinoSound();
+            });
         }
         
         // Handle edit name buttons
@@ -895,86 +898,96 @@
             var editBtn = editButtons[i];
             var player = editBtn.getAttribute('data-player');
             
-            if ('ontouchstart' in window) {
-                editBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    var targetPlayer = this.getAttribute('data-player');
-                    editPlayerName(targetPlayer);
-                }, { passive: false });
-            } else {
-                editBtn.addEventListener('click', function() {
-                    var targetPlayer = this.getAttribute('data-player');
-                    editPlayerName(targetPlayer);
-                });
-            }
+            
+            editBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var targetPlayer = this.getAttribute('data-player');
+                editPlayerName(targetPlayer);
+            }, { passive: false });
+            
+            editBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var targetPlayer = this.getAttribute('data-player');
+                editPlayerName(targetPlayer);
+            });
         }
         
         // Handle hamburger menu button
         var hamburgerBtn = document.getElementById('hamburgerBtn');
         if (hamburgerBtn) {
-            if ('ontouchstart' in window) {
-                hamburgerBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    toggleMenu();
-                }, { passive: false });
-            } else {
-                hamburgerBtn.addEventListener('click', function() {
-                    toggleMenu();
-                });
-            }
+            
+            hamburgerBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMenu();
+            }, { passive: false });
+            
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMenu();
+            });
         }
         
         // Handle reset all button in menu
         var resetAllBtn = document.getElementById('resetAllBtn');
         if (resetAllBtn) {
-            if ('ontouchstart' in window) {
-                resetAllBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    resetAllCounters();
-                    resetPlayerNames();
-                    resetPlayerColors();
-                    resetPlayerCounters();
-                    closeMenu();
-                }, { passive: false });
-            } else {
-                resetAllBtn.addEventListener('click', function() {
-                    resetAllCounters();
-                    resetPlayerNames();
-                    resetPlayerColors();
-                    resetPlayerCounters();
-                    closeMenu();
-                });
-            }
+           
+            resetAllBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                resetAllCounters();
+                resetPlayerNames();
+                resetPlayerColors();
+                resetPlayerCounters();
+                closeMenu();
+            }, { passive: false });
+            
+            resetAllBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                resetAllCounters();
+                resetPlayerNames();
+                resetPlayerColors();
+                resetPlayerCounters();
+                closeMenu();
+            });
         }
         
         // Handle fullscreen button in menu
         var fullscreenBtn = document.getElementById('fullscreenBtn');
         if (fullscreenBtn) {
-            if ('ontouchstart' in window) {
-                fullscreenBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    toggleFullscreen();
-                }, { passive: false });
-            } else {
-                fullscreenBtn.addEventListener('click', function() {
-                    toggleFullscreen();
-                });
-            }
+            
+            fullscreenBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFullscreen();
+            }, { passive: false });
+            
+            fullscreenBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFullscreen();
+            });
         }
         
         // Handle backgrounds button in menu
         var backgroundsBtn = document.getElementById('backgroundsBtn');
         if (backgroundsBtn) {
-            if ('ontouchstart' in window) {
-                backgroundsBtn.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    showBackgrounds();
-                }, { passive: false });
-            } else {
-                backgroundsBtn.addEventListener('click', function() {
-                    showBackgrounds();
-                });
-            }
+            
+            backgroundsBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                showBackgrounds();
+            }, { passive: false });
+            
+            backgroundsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                showBackgrounds();
+            });
         }
         
         // Handle player menu buttons
