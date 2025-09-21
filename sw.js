@@ -1,13 +1,13 @@
 const CACHE_NAME = 'mtg-life-tracker-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/audio/roar1.mp3',
-  '/audio/roar2.mp3',
-  '/audio/roar3.mp3'
+  '/Simple_Life_Tracker/',
+  '/Simple_Life_Tracker/index.html',
+  '/Simple_Life_Tracker/styles.css',
+  '/Simple_Life_Tracker/script.js',
+  '/Simple_Life_Tracker/manifest.json',
+  '/Simple_Life_Tracker/audio/roar1.mp3',
+  '/Simple_Life_Tracker/audio/roar2.mp3',
+  '/Simple_Life_Tracker/audio/roar3.mp3'
 ];
 
 // Install event - cache resources

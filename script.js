@@ -130,7 +130,7 @@
         // Register Service Worker for PWA functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('/Simple_Life_Tracker/sw.js')
                     .then(function(registration) {
                         console.log('ServiceWorker registration successful');
                     })

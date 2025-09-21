@@ -2,7 +2,7 @@
   "name": "MTG Commander Life Tracker",
   "short_name": "MTG Life Tracker",
   "description": "A life tracker for Magic: The Gathering Commander games with poison, energy, and commander damage tracking",
-  "start_url": "/",
+  "start_url": "/Simple_Life_Tracker/",
   "display": "fullscreen",
   "orientation": "landscape",
   "theme_color": "#1a1a1a",
